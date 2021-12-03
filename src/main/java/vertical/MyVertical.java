@@ -1,8 +1,11 @@
+package vertical;
+
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import service.MyFriendService;
 
 /**
  * @author: Binh Nguyen
@@ -10,8 +13,16 @@ import io.vertx.ext.web.RoutingContext;
  */
 
 public class MyVertical extends AbstractVerticle {
+
+    private final MyFriendService service;
+
+    public MyVertical(MyFriendService service) {
+        this.service = service;
+    }
+
     @Override
     public void start(Promise startPromise) throws Exception {
+        service.createFriendList();
         Router router = Router.router(vertx);
         router.get("/api/friends").handler(this::getFriendList);
         vertx.createHttpServer()
@@ -31,10 +42,9 @@ public class MyVertical extends AbstractVerticle {
     }
 
     private void getFriendList(RoutingContext routingContext) {
-        String[] friends = {"Tim, Black, Jessica, Daisy, Kevin"};
         routingContext.response()
                 .putHeader("content-type", "application/json")
-                .end(Json.encode(friends));
+                .end(Json.encodePrettily(service.getFriendMap()));
     }
 
 }

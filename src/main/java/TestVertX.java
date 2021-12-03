@@ -1,4 +1,6 @@
 import io.vertx.core.Vertx;
+import service.MyFriendServiceImpl;
+import vertical.MyVertical;
 
 /**
  * @author: Binh Nguyen
@@ -8,6 +10,6 @@ import io.vertx.core.Vertx;
 public class TestVertX {
     public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(new MyVertical());
+        vertx.deployVerticle(new MyVertical(new MyFriendServiceImpl()));
     }
 }
